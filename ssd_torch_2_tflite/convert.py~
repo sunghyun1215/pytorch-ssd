@@ -1,0 +1,21 @@
+import sys
+import torch
+import argparse
+import logging
+
+parser = argparse.ArgumentParser(description='torch to onnx')
+
+parser.add_argument('--pretrained_ssd', help='pretrained model')
+# parser.add_argument('--use_cuda', default=True, type=bool, help='Use CUDA to train model')
+
+logging.basicConfig(stream=sys.stdout, level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+args = parser.parse_args()
+DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+logging.info(f"Init from pretrained ssd ==={args.pretrained_ssd}===")
+
+
+# img_size = (640, 640)
+# batch_size = 1
+# onnx_model_path = '
