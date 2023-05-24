@@ -45,6 +45,7 @@ else:
     sys.exit(1)
 net.load(model_path)
 
+
 if net_type == 'vgg16-ssd':
     predictor = create_vgg_ssd_predictor(net, candidate_size=200)
 elif net_type == 'mb1-ssd':
@@ -58,7 +59,7 @@ elif net_type == 'sq-ssd-lite':
 else:
     print("The net type is wrong. It should be one of vgg16-ssd, mb1-ssd and mb1-ssd-lite.")
     sys.exit(1)
-
+    
 
 timer = Timer()
 while True:
@@ -73,14 +74,15 @@ while True:
     for i in range(boxes.size(0)):
         box = boxes[i, :]
         label = f"{class_names[labels[i]]}: {probs[i]:.2f}"
-        cv2.rectangle(orig_image, (int(box[0]), int(box[1])), (int(box[2]), int(box[3])), (255, 255, 0), 4)
+        if class_names[labels[i]] == 'person':
+            cv2.rectangle(orig_image, (int(box[0]), int(box[1])), (int(box[2]), int(box[3])), (255, 255, 0), 4)
 
-        cv2.putText(orig_image, label,
-                    (int(box[0])+20, int(box[1])+40),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,  # font scale
-                    (255, 0, 255),
-                    2)  # line type
+            cv2.putText(orig_image, label,
+                        (int(box[0])+20, int(box[1])+40),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1,  # font scale
+                        (255, 0, 255),
+                        2)  # line type
     cv2.imshow('annotated', orig_image)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

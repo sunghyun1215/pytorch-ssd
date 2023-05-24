@@ -244,7 +244,10 @@ class RandomSampleCrop(object):
         height, width, _ = image.shape
         while True:
             # randomly choose a mode
-            mode = random.choice(self.sample_options)
+            rand_idx_tuple = (0, 1, 2, 3, 4, 5)
+            rand_idx = random.choice(rand_idx_tuple)
+            mode = self.sample_options[rand_idx]
+            # mode = random.choice(self.sample_options)
             if mode is None:
                 return image, boxes, labels
 
@@ -273,7 +276,6 @@ class RandomSampleCrop(object):
 
                 # calculate IoU (jaccard overlap) b/t the cropped and gt boxes
                 overlap = jaccard_numpy(boxes, rect)
-
                 # is min and max overlap constraint satisfied? if not try again
                 if overlap.min() < min_iou and max_iou < overlap.max():
                     continue
@@ -404,4 +406,3 @@ class PhotometricDistort(object):
             distort = Compose(self.pd[1:])
         im, boxes, labels = distort(im, boxes, labels)
         return self.rand_light_noise(im, boxes, labels)
-
